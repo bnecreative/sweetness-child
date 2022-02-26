@@ -3,7 +3,7 @@
  * 	Main Child Theme Functions
  *
  * 	@author		Kerry Kline
- * 	@copyright	Copyright (c) 2020, Kerry Kline
+ * 	@copyright	Copyright (c) 2021, Kerry Kline
  * 	@link		http://www.bnecreative.com
  * 	@package	Child Theme for BNE Sweetness v2 WordPress Framework
  *
@@ -136,10 +136,11 @@ function bne_child_theme_setup() {
 	*/
 
 	// Enable basic dark styles on the frontend.
-	// add_filter( 'bne_dark_theme_mode', '__return_true' );
+	//add_filter( 'bne_dark_theme_mode', '__return_true' );
 	
 	// Enable basic dark styles for the block editor.
-	// add_filter( 'bne_editor_dark_theme_mode', '__return_true' );    
+	// Note: Styles match frontend customizer settings
+	//add_filter( 'bne_editor_dark_theme_mode', '__return_true' );    
 
 	// Enqueue Custom Google Fonts
 	/*
@@ -198,25 +199,40 @@ Kirki::add_field( $kirki_prefix, array(
  *
  *	Adds custom content above the main header.
 */
-/*
 function bne_child_header_before() {	
 	?>
 	<div id="header-above">
 		<div class="content-area-width">
-			<div class="row">
-				<div class="col-md-6">
-					Left
+			<div class="row align-items-center justify-content-between">
+				<div class="col-10 col-md-auto">
+					<p class="header-message">24 Hour Emergency Service <span class="header-phone">(760) 721-2904</span></p>
 				</div>
-				<div class="col-md-6">
-					Right
+				<div class="d-md-flex col-10 col-md-auto">
+					<?php
+					$contact_bar = get_theme_mod( 'header_contact_bar', true );
+					if( $contact_bar == 'true' ) {
+						echo bne_contact_bar( 
+							$location = 'above', 
+							$color = 'light', 
+							$shape = 'transparent', 
+							$class = '', 
+							$size = '40px', 
+							$align = 'left', 
+							$target = '' 
+						);
+					}
+					?>
+					<a href="<?php echo get_the_permalink( 10511 ); ?>" class="btn btn-default has-dark-color has-light-background-color btn-md mr-md-2 review-btn">5 <i class="fa fa-star"></i> Reviews</a>
+					<a href="<?php echo get_the_permalink( 12256 ); ?>" class="btn btn-default has-primary-background-color btn-md appointment-btn">Book An Appointment</a>
 				</div>
 			</div>
 		</div>
 	</div>
 	<?php
 }
-add_action( 'bne_header_before', 'bne_child_header_before' );
-*/
+//add_action( 'bne_header_before', 'bne_child_header_before' );
+//add_action( 'bne_header_sticky_before', 'bne_child_header_before' );
+
 
 
 /*
@@ -276,25 +292,34 @@ add_action( 'bne_header_menu_addon', function() {
  * 	WP Core
  * ================================================================================ */
 
+// Block Editor - Reset full screen mode.
+if( is_admin() ) { 
+	add_action( 'enqueue_block_editor_assets', function() {
+		$script = "jQuery( window ).load(function() { const isFullscreenMode = wp.data.select( 'core/edit-post' ).isFeatureActive( 'fullscreenMode' ); if ( isFullscreenMode ) { wp.data.dispatch( 'core/edit-post' ).toggleFeature( 'fullscreenMode' ); } });";
+		wp_add_inline_script( 'wp-blocks', $script );
+	});
+}
 
 
 /* ===================================================================================
  * 	Plugins
  * ================================================================================ */
 
-/*
- *	Gravity Forms
-*/
+/* == Gravity Forms == */
+
+/* Enable label visibility */
 add_filter( 'gform_enable_field_label_visibility_settings', '__return_true' );
 
+/* Add Gravity Forms Shortcode to Admin Table */
 add_filter( 'gform_form_list_columns', function($columns) {
 	$columns['shortcode'] = 'Shortcode';
 	return $columns;
 }, 10, 1 );
 
-add_action( 'gform_form_list_column_shortcode', function($item) {
-	echo '[gravityform id="'.$item->id.'" title="false" description="false" ajax="true"]';
-}, 10, 1 );
+/* Shortcode Column Content */
+add_action( 'gform_form_list_column_shortcode', function( $form ) {
+	echo '[gravityform id='.$form->id.' title=false description=false ajax=true]';
+} );
 
 
 
@@ -305,9 +330,6 @@ add_filter( 'gform_get_form_filter', function( $form_string, $form ) {
 			
 	// Google Terms
 	//$terms .= '<div class="gf-recaptcha-terms small my-3"><em>This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" style="color: inherit;">Privacy Policy</a> and <a href="https://policies.google.com/terms" style="color: inherit;">Terms of Service</a> apply.</em></div>';
-
-	// hCaptcha Terms
-	$terms .= '<div class="gf-recaptcha-terms small my-3"><em>This site is protected by hCaptcha and its <a href="https://hcaptcha.com/privacy" style="color: inherit;">Privacy Policy</a> and <a href="https://hcaptcha.com/terms" style="color: inherit;">Terms of Service</a> apply.</em></div>';
 
 	$form_string = str_replace('</form>', '</form>'.$terms, $form_string);
 	return $form_string;
