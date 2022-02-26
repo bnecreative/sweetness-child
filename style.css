@@ -172,7 +172,7 @@ p + h3,
 		right: 0;
 		color: white;
 		background-color: var(--theme-primary-color);
-        	font-size: 40px;
+        font-size: 40px;
 	}
     .btn-navbar.open-nav .bne-fa {
         width: 40px;
@@ -201,8 +201,46 @@ p + h3,
  *	Header
  * ======================================================== */
 
+/* == Header Above == */
+#header-above {
+    background-color: var(--theme-secondary-color);
+    color: white;
+    padding: 10px 30px;
+    box-shadow: 0px 1px 5px rgba(0,0,0,.4);
+    z-index: 11;
+}
 
-@media (min-width: 768px) {    
+#header-above a[href^='tel:'] { 
+    color: inherit;
+}
+#header-above p:last-of-type { 
+    margin: 0;
+}
+
+#header-above .bne-contact-bar.contact-bar-left ul, 
+#header-above .bne-contact-bar.contact-bar-center li {
+    float: none;
+    text-align: left;
+}
+#header-above .bne-contact-bar {
+    margin-bottom: 0;
+}
+
+/*
+#header-wrapper .bne-contact-bar {
+    display: none;
+}
+*/
+
+@media (min-width: 768px) {
+    /* Max header width */
+    /*
+    #header-above .content-area-width,
+    #header-wrapper .content-area-width {
+        max-width: 100%;
+    }
+    */
+    
     #header-wrapper {
         padding-top: 20px;
         padding-bottom: 20px;
@@ -211,6 +249,7 @@ p + h3,
     
     .header-transparent #header-wrapper {
          background: rgba(0,0,0,.5);
+         /*top: 60px;*/
     }
     
 	#header-wrapper .header-content {
@@ -229,12 +268,10 @@ p + h3,
         align-content: space-around;
         display: flex;
     }
-	
     .header-widget-area .widget {
         padding-left: 1.5rem;
         padding-right: 1.5rem;
     }
-	
     .header-widget-area .widget:last-of-type {
         padding-right: 0;
     }
@@ -253,6 +290,7 @@ p + h3,
     }
     
 }
+
 
 #sticky-header #header-above {
     margin: 0 -30px;
@@ -310,12 +348,10 @@ p + h3,
     .wp-block-media-text.is-stacked-on-mobile {
         grid-template-columns: 100% !important;
     }
-	
     .wp-block-media-text.is-stacked-on-mobile .wp-block-media-text__media {
         grid-column: 1;
         grid-row: 1;
     }
-	
     .wp-block-media-text.is-stacked-on-mobile .wp-block-media-text__content {
         grid-column: 1;
         grid-row: 2;   
@@ -324,11 +360,9 @@ p + h3,
     .wp-block-media-text .wp-block-media-text__content {
         padding: 20px 0 0 0;
     }
-	
     .wp-block-media-text.alignfull .wp-block-media-text__content {
         padding: 20px 30px;
     }
-	
     .wp-block-media-text.has-background:not(.alignfull) .wp-block-media-text__content {
         padding: 20px 30px;
     }
